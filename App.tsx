@@ -1,39 +1,16 @@
+import { SafeAreaView, StyleSheet } from "react-native";
+import { SWRConfig } from "swr";
 import { StatusBar } from "expo-status-bar";
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import useSWR from "swr";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { usePosts } from "./src/hooks/posts";
+import PostsScreen from "./src/app/PostsScreen";
 
 export default function App() {
-  const { data, error, isLoading } = useSWR(
-    "https://jsonplaceholder.typicode.com/posts",
-    fetcher
-  );
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ActivityIndicator />
-      </SafeAreaView>
-    );
-  }
-  if (error) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text>failed to load. {error.message}</Text>
-      </SafeAreaView>
-    );
-  }
-  console.log(JSON.stringify(data, null, 2));
+  const { posts, error, isLoading } = usePosts();
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Hello There!</Text>
+      <PostsScreen />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
